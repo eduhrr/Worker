@@ -11,6 +11,8 @@ import com.amazonaws.services.ec2.AmazonEC2Client;
 import com.amazonaws.services.ec2.model.TerminateInstancesRequest;
 import com.amazonaws.services.sqs.AmazonSQS;
 import com.amazonaws.services.sqs.AmazonSQSClient;
+import com.amazonaws.services.sqs.model.GetQueueUrlRequest;
+import com.amazonaws.services.sqs.model.SendMessageRequest;
 
 
 public class mandarMens {
@@ -31,17 +33,17 @@ public class mandarMens {
 
 		init();
 		//setRowId(System.getenv("rowId"));
-		setRowId("33");
+		setRowId("Esto es una prueba de que la cosa se ejecuta y va!!");
 
 		try {
 			Runnable newClient = new ClientWorkerThread(); 
 	        Thread t = new Thread(newClient);
 	        t.start(); 
 			
-//			GetQueueUrlRequest qrequest = new GetQueueUrlRequest("iitLuna");
-//			String url = getSqs().getQueueUrl(qrequest).getQueueUrl();
-//
-//			getSqs().sendMessage(new SendMessageRequest(url, getRowId())); // no
+			GetQueueUrlRequest qrequest = new GetQueueUrlRequest("iitLuna");
+			String url = getSqs().getQueueUrl(qrequest).getQueueUrl();
+
+			getSqs().sendMessage(new SendMessageRequest(url, getRowId())); // no
 																			// hay
 																			// variable..obvio
 		} catch (AmazonServiceException ase) {
