@@ -1,4 +1,5 @@
 import java.io.BufferedReader;
+import java.io.FileReader;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.Date;
@@ -35,7 +36,16 @@ public class mandarMens {
 		logging("Developed by Eduardo Hernandez Marquina, Hector Veiga and Gerardo Travesedo");
 		logging("");
 		init();
-		setRowId(mandarMens.class.getResourceAsStream("rowID.txt").toString());
+		BufferedReader bf = new BufferedReader(new FileReader("rowID.txt"));
+		String rowIDaux="";
+//		String strLinea="";
+//        // read the file line by line
+//        while ((strLinea = bf.readLine()) != null)   {
+//            rowIDaux= rowIDaux+strLinea;
+//        }
+		rowIDaux = bf.readLine();
+        bf.close();
+		setRowId(rowIDaux);
 		logging("Id of row of request retrieved: " + rowID);
 //		setRowId("Esto es una prueba de que la cosa se ejecuta y va!!");
 
