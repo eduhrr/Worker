@@ -1,6 +1,7 @@
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import com.amazonaws.AmazonClientException;
 import com.amazonaws.AmazonServiceException;
@@ -18,7 +19,7 @@ import com.amazonaws.services.sqs.model.SendMessageRequest;
 public class mandarMens {
 
 	private static AmazonEC2 ec2;
-	private static String rowId;
+	private static String rowID;
 	private static AmazonSQS sqs;
 
 	private static void init() throws Exception {
@@ -30,15 +31,18 @@ public class mandarMens {
 	}
 
 	public static void main(String[] args) throws Exception {
-
+		logging("Luna Worker Script");
+		logging("Developed by Eduardo Hernandez Marquina, Hector Veiga and Gerardo Travesedo");
+		logging("");
 		init();
-		//setRowId(System.getenv("rowId"));
-		setRowId("Esto es una prueba de que la cosa se ejecuta y va!!");
+		setRowId(mandarMens.class.getResourceAsStream("rowID.txt").toString());
+		logging("Id of row of request retrieved: " + rowID);
+//		setRowId("Esto es una prueba de que la cosa se ejecuta y va!!");
 
 		try {
-			Runnable newClient = new ClientWorkerThread(); 
-	        Thread t = new Thread(newClient);
-	        t.start(); 
+//			Runnable newClient = new ClientWorkerThread(); 
+//	        Thread t = new Thread(newClient);
+//	        t.start(); 
 			
 			GetQueueUrlRequest qrequest = new GetQueueUrlRequest("iitLuna");
 			String url = getSqs().getQueueUrl(qrequest).getQueueUrl();
@@ -59,9 +63,10 @@ public class mandarMens {
 		}
 		
 		
-		// Thread.sleep(30000); //sleep for 30 seg
-		// Kill instance
-		//killmePlease();
+		//Thread.sleep(30000); //sleep for 30 seg
+		Thread.sleep(100*60*15); //sleep for 15 min
+		//Kill instance
+		killmePlease();
 	}
 
 	public static void killmePlease() {
@@ -86,6 +91,93 @@ public class mandarMens {
 		terminateRequest.setInstanceIds(instancesToTerminate);
 		getEc2().terminateInstances(terminateRequest);
 	}
+	
+//	private static String getInstanceType() {
+//		String instanceType = "";
+//		try {
+//			Process p = Runtime
+//					.getRuntime()
+//					.exec("sudo wget -q -O - http://169.254.169.254/latest/meta-data/instance-type");
+//			p.waitFor();
+//			BufferedReader br = new BufferedReader(new InputStreamReader(
+//					p.getInputStream()));
+//			instanceType = br.readLine();
+//		} catch (Exception e) {
+//			e.printStackTrace();
+//		}
+//		return instanceType;
+//	}
+
+	public static String substringBetween(String str, String open, String close) {
+		if (str == null || open == null || close == null) {
+			return null;
+		}
+		int start = str.indexOf(open);
+		if (start != -1) {
+			int end = str.indexOf(close, start + open.length());
+			if (end != -1) {
+				return str.substring(start + open.length(), end);
+			}
+		}
+		return null;
+	}
+
+	public static int giveMeSeconds(String line, String del1, String del2) {
+		String durVid = "";
+		String[] durVidPieces;
+
+		durVid = substringBetween(line, del1, del2);
+		durVidPieces = durVid.split(":");
+		int secs = (Integer.parseInt(durVidPieces[0]) * 3600)
+				+ (Integer.parseInt(durVidPieces[1]) * 60)
+				+ Integer.parseInt(durVidPieces[2].substring(0, 2));
+		return secs;
+	}
+
+//	private static void updateStatus(String percentage) {
+//		// Update Database Status
+//		try {
+//			Connection connec = DriverManager.getConnection(
+//					"jdbc:mysql://64.131.110.162/luna", "Europa", "a23d578");
+//			Statement s = connec.createStatement();
+//			String query1 = "UPDATE requests SET status='" + percentage
+//					+ "' WHERE id='" + rowId + "'";
+//			s.executeUpdate(query1);
+//			s.close();
+//			connec.close();
+//		} catch (Exception e) {
+//			logging("Exception catch!!!! Something wrong updating status of a request");
+//			logging(e.toString());
+//		}
+//	}
+
+//	private static void updateParameter(String parameter, long quantity) {
+//		logging("Updating parameter '" + parameter + "' by " + quantity);
+//
+//		// Update Database Parameter
+//		try {
+//			Connection connec = DriverManager.getConnection(
+//					"jdbc:mysql://64.131.110.162/luna", "Europa", "a23d578");
+//			Statement s = connec.createStatement();
+//			String query1 = "UPDATE parameters SET value=value+"
+//					+ String.valueOf(quantity) + " WHERE parameter='"
+//					+ parameter + "'";
+//			s.executeUpdate(query1);
+//			s.close();
+//			connec.close();
+//		} catch (Exception e) {
+//			logging("Exception catch!!!! Something wrong updating status of a request");
+//			logging(e.toString());
+//		}
+//	}
+
+	private static void logging(String lineToLog) {
+		Date time = new Date();
+		String line = "[" + time.toString() + "] " + lineToLog;
+		System.out.println(line);
+	}
+
+
 
 	public static AmazonEC2 getEc2() {
 		return ec2;
@@ -96,11 +188,11 @@ public class mandarMens {
 	}
 
 	public static String getRowId() {
-		return rowId;
+		return rowID;
 	}
 
 	public static void setRowId(String rowId) {
-		mandarMens.rowId = rowId;
+		mandarMens.rowID = rowId;
 	}
 
 	public static AmazonSQS getSqs() {
