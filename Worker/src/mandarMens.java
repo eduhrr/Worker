@@ -1,5 +1,6 @@
 import java.io.BufferedReader;
 import java.io.FileReader;
+import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.Date;
@@ -20,39 +21,57 @@ import com.amazonaws.services.sqs.model.SendMessageRequest;
 public class mandarMens {
 
 	private static AmazonEC2 ec2;
-	private static String rowID;
 	private static AmazonSQS sqs;
+	private static String rowID;
+	private static String receipHandle;
 
-	private static void init() throws Exception {
-		AWSCredentials credentials = new PropertiesCredentials(
-				mandarMens.class
-						.getResourceAsStream("AwsCredentials.properties"));
-		setEc2(new AmazonEC2Client(credentials));
-		setSqs(new AmazonSQSClient(credentials));
+
+	/**
+	 * Static initializer block for setting up the AWS credentials which should
+	 * be in the top folder-
+	 * 
+	 */
+	static {
+		AWSCredentials credentials;
+		try {
+			credentials = new PropertiesCredentials(
+					mandarMens.class
+							.getResourceAsStream("AwsCredentials.properties"));
+			setEc2(new AmazonEC2Client(credentials));
+			setSqs(new AmazonSQSClient(credentials));
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
 
 	public static void main(String[] args) throws Exception {
 		logging("Luna Worker Script");
 		logging("Developed by Eduardo Hernandez Marquina, Hector Veiga and Gerardo Travesedo");
 		logging("");
-		init();
-		BufferedReader bf = new BufferedReader(new FileReader("rowID.txt"));
-		String rowIDaux="";
+		Date time1 = new Date();
+		long epoch1 = (long) System.currentTimeMillis() / 1000;
+		
+		//Getting the Data (rowID and receipHandle) inside the file
+		BufferedReader bf = new BufferedReader(new FileReader("data.txt"));
 //		String strLinea="";
 //        // read the file line by line
 //        while ((strLinea = bf.readLine()) != null)   {
 //            rowIDaux= rowIDaux+strLinea;
 //        }
-		rowIDaux = bf.readLine();
+		String data = bf.readLine();
         bf.close();
-		setRowId(rowIDaux);
-		logging("Id of row of request retrieved: " + rowID);
-//		setRowId("Esto es una prueba de que la cosa se ejecuta y va!!");
+		String[] parts = data.split(",");
+		setRowId(parts[0]);
+		logging("Id of row of request retrieved: " + getRowId());
+		setReceipHandle(parts[1]);
+		logging("ReceipHandle of request retrieved: " + getReceipHandle());
+
 
 		try {
-//			Runnable newClient = new ClientWorkerThread(); 
-//	        Thread t = new Thread(newClient);
-//	        t.start(); 
+	        logging("Launching the Thread!");
+			Runnable newClient = new ClientWorkerThread(data); 
+	        Thread t = new Thread(newClient);
+	        t.start();
 			
 			GetQueueUrlRequest qrequest = new GetQueueUrlRequest("iitLuna");
 			String url = getSqs().getQueueUrl(qrequest).getQueueUrl();
@@ -181,7 +200,7 @@ public class mandarMens {
 //		}
 //	}
 
-	private static void logging(String lineToLog) {
+	public static void logging(String lineToLog) {
 		Date time = new Date();
 		String line = "[" + time.toString() + "] " + lineToLog;
 		System.out.println(line);
@@ -211,6 +230,14 @@ public class mandarMens {
 
 	public static void setSqs(AmazonSQS sqs) {
 		mandarMens.sqs = sqs;
+	}
+
+	public static String getReceipHandle() {
+		return receipHandle;
+	}
+
+	public static void setReceipHandle(String receipHandle) {
+		mandarMens.receipHandle = receipHandle;
 	}
 
 }

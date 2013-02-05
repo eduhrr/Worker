@@ -6,7 +6,14 @@ import java.util.Random;
 
 
 public class ClientWorkerThread implements Runnable {
+	private String dataToSend;
 	
+	public ClientWorkerThread(String data) {
+		super();
+		this.setDataToSend(data);
+		mandarMens.logging("Retrieved data in thread" + getDataToSend() );
+	}
+
 	@Override
 	public void run() {
 		String serverName = "54.243.226.19";//TODO: change to EC2 private IP
@@ -21,14 +28,15 @@ public class ClientWorkerThread implements Runnable {
 			input = new DataInputStream(client.getInputStream());
 			output = new DataOutputStream(client.getOutputStream());
 			
-			//send what kind of instance (m1 or t1)
-			output.writeUTF("m1");
+			//send data to the master
+			output.writeUTF(this.getDataToSend());
+			mandarMens.logging("Sent data in thread" + getDataToSend() );
 			
 			//listen de rowID
-			int rowID = input.readInt();
-			System.out.println("rowID="+rowID);
+			//int rowID = input.readInt();
+			//System.out.println("rowID="+rowID);
 			
-			//Doing stuff
+			//Doing the stuff
 			Thread.sleep(3*60*100); //3 minutes
 			
 			//send the result
@@ -50,6 +58,14 @@ public class ClientWorkerThread implements Runnable {
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
+	}
+
+	public String getDataToSend() {
+		return dataToSend;
+	}
+
+	public void setDataToSend(String dataToSend) {
+		this.dataToSend = dataToSend;
 	}
 
 //	public static void main(String[] args) {
