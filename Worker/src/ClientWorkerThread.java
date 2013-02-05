@@ -11,7 +11,7 @@ public class ClientWorkerThread implements Runnable {
 	public ClientWorkerThread(String data) {
 		super();
 		this.setDataToSend(data);
-		mandarMens.logging("Retrieved data in thread" + getDataToSend() );
+		mandarMens.logging("Retrieved data in thread " + getDataToSend() );
 	}
 
 	@Override
@@ -22,9 +22,12 @@ public class ClientWorkerThread implements Runnable {
 		DataOutputStream output;
 		
 		try {
+			mandarMens.logging("here 1");
 			Socket client = new Socket(serverName, port);
+			mandarMens.logging("here 2");
 			client.setSoTimeout(600000);  //TODO: 10 minutes ->control if Master is not using it
 		    //client.setSoTimeout(36000000);  //10 hours ->control if Master is not using it
+			mandarMens.logging("here 3");
 			input = new DataInputStream(client.getInputStream());
 			output = new DataOutputStream(client.getOutputStream());
 			
