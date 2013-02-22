@@ -84,8 +84,12 @@ public class mandarMens {
 																			// hay
 																			// variable..obvio
 			
+			loggingSent("Hola");
+			loggingSent("Hola 0");
+			loggingSent("Hola 1");
+			
 			//String With the key to terminate the communication thread
-			logging("The renderization has been finished");
+			loggingSent("The renderization has been finished");
 			
 			
 		} catch (AmazonServiceException ase) {
@@ -213,11 +217,17 @@ public class mandarMens {
 		Date time = new Date();
 		String line = "[" + time.toString() + "] " + lineToLog;
 		System.out.println(line);
+		//writing in the shared resource without synchronism
+		getMessageObject().setMsg(getMessageObject().getMsg()+ "\n"+line);
+	}
+
+	public static void loggingSent(String lineToLog) {
+		Date time = new Date();
+		String line = "[" + time.toString() + "] " + lineToLog;
+		System.out.println(line);
 		//writing in the shared resource
 		getMessageObject().putResource(line);
 	}
-
-
 
 	public static AmazonEC2 getEc2() {
 		return ec2;

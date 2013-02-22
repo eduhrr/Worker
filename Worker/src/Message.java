@@ -13,7 +13,7 @@
  */
 class Message {
 	private String msg = "";
-	private boolean statusToComsume = false;
+	private boolean statusToComsume = true;
 
 	/**
 	 * Method to get the shared resource It will put sleeping the thread who
