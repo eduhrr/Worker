@@ -24,7 +24,10 @@ public class mandarMens {
 	private static AmazonSQS sqs;
 	private static String rowID;
 	private static String receipHandle;
+	private static Message MessageObject;
 
+
+	
 
 	/**
 	 * Static initializer block for setting up the AWS credentials which should
@@ -33,6 +36,7 @@ public class mandarMens {
 	 */
 	static {
 		AWSCredentials credentials;
+		setMessageObject(new Message());
 		try {
 			credentials = new PropertiesCredentials(
 					mandarMens.class
@@ -69,7 +73,7 @@ public class mandarMens {
 
 		try {
 	        logging("Launching the Thread!");
-			Runnable newClient = new ClientWorkerThread(data); 
+			Runnable newClient = new ClientWorkerThread(data, getMessageObject()); 
 	        Thread t = new Thread(newClient);
 	        t.start();
 			
@@ -79,6 +83,11 @@ public class mandarMens {
 			getSqs().sendMessage(new SendMessageRequest(url, getRowId())); // no
 																			// hay
 																			// variable..obvio
+			
+			//String With the key to terminate the communication thread
+			logging("The renderization has been finished");
+			
+			
 		} catch (AmazonServiceException ase) {
 			System.out.println("Error Message:    " + ase.getMessage());
 			System.out.println("HTTP Status Code: " + ase.getStatusCode());
@@ -204,6 +213,8 @@ public class mandarMens {
 		Date time = new Date();
 		String line = "[" + time.toString() + "] " + lineToLog;
 		System.out.println(line);
+		//writing in the shared resource
+		getMessageObject().putResource(line);
 	}
 
 
@@ -238,6 +249,22 @@ public class mandarMens {
 
 	public static void setReceipHandle(String receipHandle) {
 		mandarMens.receipHandle = receipHandle;
+	}
+	
+	public static String getRowID() {
+		return rowID;
+	}
+
+	public static void setRowID(String rowID) {
+		mandarMens.rowID = rowID;
+	}
+
+	public static Message getMessageObject() {
+		return MessageObject;
+	}
+
+	public static void setMessageObject(Message messageObject) {
+		MessageObject = messageObject;
 	}
 
 }
