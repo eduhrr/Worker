@@ -44,14 +44,14 @@ public class Renderer implements Runnable{
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} 
-		getMessageObject().putResource(l.logging("Probando 1"));
+		getMessageObject().putResource(l.logging("Probando 2"));
 		try {
 			Thread.sleep(1*1000);
 		} catch (InterruptedException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} 
-		getMessageObject().putResource(l.logging("Probando 1"));
+		getMessageObject().putResource(l.logging("Probando 2"));
 		
 	}
 
