@@ -1,6 +1,7 @@
 /**
  * 
  */
+import java.io.IOException;
 import java.util.Date;
 
 /**
@@ -37,29 +38,47 @@ public class Renderer implements Runnable {
 		long epoch1 = (long) System.currentTimeMillis() / 1000;
 
 		// rendering code
-		getMessageObject().putResource(l.logging("Probando 1"));
-		try {
-			Thread.sleep(1 * 1000);
-		} catch (InterruptedException e) {
+		try { // TODO!!!
+			// rendering process
+			Process p = Runtime.getRuntime().exec("sleep 60");
+
+			// Sending the status every 30 minutes to keep alive the
+			// Communication thread for the LunaCore
+			int i = 0;
+			int hours, min;
+			// TODO: CHange to 30 minutes
+			while (!processIsTerminated(p)) {
+//				hours = (i * 30) % 60;
+//				min = i * 30 - hours * 60;
+				hours = (i * 100) % 1000;
+				min = i * 100 - hours * 1000;
+//				getMessageObject().putResource(
+//						l.logging("Renderer is working, elapsed time: " + hours
+//								+ "hours and " + min + "minutes"));
+				getMessageObject().putResource(
+						l.logging("Renderer is working, elapsed time: " + hours
+								+ "sec and " + min + "milisec"));
+				i += 1;
+				//TODO:cambiar esto y ver como falla
+				Thread.sleep(100);
+			}
+		} catch (IOException | InterruptedException e1) {
 			// TODO Auto-generated catch block
-			e.printStackTrace();
+			e1.printStackTrace();
 		}
-		getMessageObject().putResource(l.logging("Probando 2"));
-		try {
-			Thread.sleep(1 * 1000);
-		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		getMessageObject().putResource(l.logging("Probando 3"));
-		try {
-			Thread.sleep(1 * 1000);
-		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+
 		getMessageObject().putResource("The rendering has been finished");
 
+	}
+
+	// To now when a external process is terminated
+	private boolean processIsTerminated(Process p) {
+		try {
+			p.exitValue();
+		} catch (IllegalThreadStateException itse) {
+			return false;
+		}
+		return true;
 	}
 
 	// TODO: ver si se usa en la renderizacion
