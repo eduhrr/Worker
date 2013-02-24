@@ -50,17 +50,16 @@ public class Renderer implements Runnable {
 			while (!processIsTerminated(p)) {
 //				hours = (i * 30) % 60;
 //				min = i * 30 - hours * 60;
-				hours = (i * 100) % 1000;
-				min = i * 100 - hours * 1000;
+				hours = (i * 1000) % 1000;
 //				getMessageObject().putResource(
 //						l.logging("Renderer is working, elapsed time: " + hours
 //								+ "hours and " + min + "minutes"));
 				getMessageObject().putResource(
 						l.logging("Renderer is working, elapsed time: " + hours
-								+ "sec and " + min + "milisec"));
+								+ "sec and "));
 				i += 1;
 				//TODO:cambiar esto y ver como falla
-				Thread.sleep(100);
+				Thread.sleep(1000);
 			}
 		} catch (IOException | InterruptedException e1) {
 			// TODO Auto-generated catch block
