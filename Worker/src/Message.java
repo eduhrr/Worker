@@ -12,8 +12,8 @@
  * 
  */
 class Message {
-	private String msg = "";
-	private boolean statusToComsume = true;
+	private String msg = ""; 
+	private boolean statusToComsume = false;	
 
 	/**
 	 * Method to get the shared resource It will put sleeping the thread who

@@ -1,84 +1,84 @@
+/**
+ * 
+ */
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.net.Socket;
-import java.util.Random;
 
+/**
+ * Responsible class for the communication with the LunaCore and the 
+ * termination of the instance in case of successful.
+ * 
+ * @author Eduardo Hernandez Marquina
+ * 
+ */
 public class ClientWorkerThread implements Runnable {
-	private String dataToSend;
+	private int rowID;
+	private String receiptHandle;
 	private Message messageObject;
+	private String serverName;
+	private int port;
+	InstanceManager instanceManager;
 
-	public ClientWorkerThread(String data, Message messageObjet) {
+	public ClientWorkerThread(int rowID, String receiptHandle,
+			Message messageObjet, String serverName, int port,
+			InstanceManager instanceManager) {
 		super();
-		this.setDataToSend(data);
+		setReceiptHandle(receiptHandle);
+		setRowID(rowID);
 		setMessageObject(messageObjet);
-		mandarMens.logging("Retrieved data in thread " + getDataToSend()); // TODO
-																			// ??
+		setServerName(serverName);
+		setPort(port);
+		setInstanceManager(instanceManager);
+		new Thread(this, "ClientWorkerThread").start();
 	}
 
 	@Override
 	public void run() {
-		String serverName = "54.243.226.19";// TODO: change to EC2 private IP
-											// Hard CODE
-		int port = 6060;
+		Logger l = new Logger();
 		DataInputStream input;
 		DataOutputStream output;
 
 		try {
-			// mandarMens.logging("here 1");
-			Socket client = new Socket(serverName, port);
-			// mandarMens.logging("here 2");
-			client.setSoTimeout(600000); // TODO: 10 minutes ->control if Master
-											// is not using it
-			// client.setSoTimeout(36000000); //10 hours ->control if Master is
-			// not using it
-			// mandarMens.logging("here 3");
+			Socket client = new Socket(getServerName(), getPort());
+			// It will try to connect with Lunacore for 10 minutes as much
+			// if it will not able to reach it, a exception will be launched
+			client.setSoTimeout(10 * 60 * 1000);
 			input = new DataInputStream(client.getInputStream());
 			output = new DataOutputStream(client.getOutputStream());
 
-			// send data to LunaCore
-			output.writeUTF(this.getDataToSend());
-			mandarMens.logging("Sent data in thread" + getDataToSend());
+			// sending rowID to LunaCore
+			output.writeUTF(String.valueOf(this.getRowID()));
+			l.logging("Sent rowID: " + this.getRowID());
 
-			// listen de rowID fomr the LunaCore
-			// int rowID = input.readInt();
-			// System.out.println("rowID="+rowID);
+			// sending receiptHandle to LunaCore
+			output.writeUTF(this.getReceiptHandle());
+			l.logging("Sent receiptHandle: " + this.getReceiptHandle());
 
 			// The Sending worker's Status while
 			String msg = "";
 			do {
 				// the next statement will sleep the thread until a new Shared
-				// resource will be ready to comsume
+				// resource will be ready to consume
 				msg = getMessageObject().getResource();
 				output.writeUTF(msg);
+				l.logging("Sent message: " + msg);
 			} while (!msg.equals("The rendering has been finished"));
 
-			// Thread.sleep(3*60*100); //3 minutes
-
-			// //send the result
-			// Random num = new Random(port);
-			// if (num.nextBoolean()){
-			// output.writeUTF("DONE");
-			// }else{
-			// output.writeUTF("BAD RESULT");
-			// }
-
+			/*
+			 * At this point the rendering job is done. It is needed now to
+			 * terminate the instance
+			 */
 			output.close();
 			input.close();
 			client.close();
 			// Kill instance
-			mandarMens.killmePlease();
+			getInstanceManager().killmePlease(); 
+			
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-	}
-
-	public String getDataToSend() {
-		return dataToSend;
-	}
-
-	public void setDataToSend(String dataToSend) {
-		this.dataToSend = dataToSend;
 	}
 
 	public Message getMessageObject() {
@@ -89,10 +89,44 @@ public class ClientWorkerThread implements Runnable {
 		this.messageObject = messageObject;
 	}
 
-	// public static void main(String[] args) {
-	// Runnable newClient = new ClientWorkerThread();
-	// Thread t = new Thread(newClient);
-	// t.start();
-	// }
+	public int getRowID() {
+		return rowID;
+	}
+
+	public void setRowID(int rowID) {
+		this.rowID = rowID;
+	}
+
+	public String getReceiptHandle() {
+		return receiptHandle;
+	}
+
+	public void setReceiptHandle(String receiptHandle2) {
+		this.receiptHandle = receiptHandle2;
+	}
+
+	public String getServerName() {
+		return serverName;
+	}
+
+	public void setServerName(String serverName) {
+		this.serverName = serverName;
+	}
+
+	public int getPort() {
+		return port;
+	}
+
+	public void setPort(int port) {
+		this.port = port;
+	}
+
+	public InstanceManager getInstanceManager() {
+		return instanceManager;
+	}
+
+	public void setInstanceManager(InstanceManager instanceManager) {
+		this.instanceManager = instanceManager;
+	}
 
 }
