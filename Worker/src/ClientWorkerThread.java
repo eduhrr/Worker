@@ -64,8 +64,12 @@ public class ClientWorkerThread implements Runnable {
 				msg = getMessageObject().getResource();
 				output.writeUTF(msg);
 				l.logging("Sent message: " + msg);
-			} while (!msg.equals("The rendering has been finished"));
-
+				if (msg.equals("The rendering has been finished"))
+					output.writeUTF("I've got the ending point");
+			} while (!msg.equals("The rendering has been finished")); //TODO: probar que sale de aqui!!
+			
+			l.logging("Out of the while finish!!!");
+			output.writeUTF("Out of the while finish!!!");
 			/*
 			 * At this point the rendering job is done. It is needed now to
 			 * terminate the instance
@@ -73,8 +77,10 @@ public class ClientWorkerThread implements Runnable {
 			output.close();
 			input.close();
 			client.close();
+			l.logging("About to finish!!!");
 			// Kill instance
 			getInstanceManager().killmePlease(); 
+			l.logging("terminated!!!");
 			
 		} catch (IOException e) {
 			e.printStackTrace();

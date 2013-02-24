@@ -31,7 +31,6 @@ class Message {
 				e.printStackTrace();
 			}
 
-		System.out.println("Obtenido: " + getMsg());
 		setStatusToComsume(false);
 		notify();
 		return getMsg();
@@ -56,7 +55,6 @@ class Message {
 			}
 		setMsg(msg);
 		setStatusToComsume(true);
-		System.out.println("Colocado: " + getMsg());
 		notify();
 	}
 

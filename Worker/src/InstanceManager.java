@@ -23,6 +23,8 @@ public class InstanceManager {
 	// Kill myself
 	public void killmePlease() {
 		// Kill myself
+		Logger l = new Logger();
+		l.logging("Inside Kill me please");
 		String instanceId = "";
 		try {
 			Process p = Runtime
@@ -39,9 +41,11 @@ public class InstanceManager {
 		List<String> instancesToTerminate = new ArrayList<String>();
 		instancesToTerminate.add(instanceId);
 
+		l.logging("Inside Kill me please, about to end");
 		TerminateInstancesRequest terminateRequest = new TerminateInstancesRequest();
 		terminateRequest.setInstanceIds(instancesToTerminate);
 		getEc2().terminateInstances(terminateRequest);
+		l.logging("Inside Kill me please, terminated");
 	}
 
 	public String getInstanceType() {
