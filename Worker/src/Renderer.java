@@ -58,7 +58,7 @@ public class Renderer implements Runnable {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		getMessageObject().putResource(l.logging("The rendering has been finished"));
+		getMessageObject().putResource("The rendering has been finished");
 
 	}
 
