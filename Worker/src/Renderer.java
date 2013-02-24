@@ -11,7 +11,7 @@ import java.util.Date;
  * @author Gerardo Travesedo
  * 
  */
-public class Renderer implements Runnable{
+public class Renderer implements Runnable {
 
 	private String rowID;
 	private String receiptHandle;
@@ -27,35 +27,42 @@ public class Renderer implements Runnable{
 		setInstanceManager(instanceManager);
 		new Thread(this, "Renderer").start();
 	}
-	
+
 	@Override
 	public void run() {
 		Logger l = new Logger();
-		
-		//TODO: WHAT IS THE PURPOUS???
+
+		// TODO: WHAT IS THE PURPOUS???
 		Date time1 = new Date();
 		long epoch1 = (long) System.currentTimeMillis() / 1000;
-		
-		//rendering code
+
+		// rendering code
 		getMessageObject().putResource(l.logging("Probando 1"));
 		try {
-			Thread.sleep(1*1000);
+			Thread.sleep(1 * 1000);
 		} catch (InterruptedException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-		} 
+		}
 		getMessageObject().putResource(l.logging("Probando 2"));
 		try {
-			Thread.sleep(1*1000);
+			Thread.sleep(1 * 1000);
 		} catch (InterruptedException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-		} 
-		getMessageObject().putResource(l.logging("Probando 2"));
-		
+		}
+		getMessageObject().putResource(l.logging("Probando 3"));
+		try {
+			Thread.sleep(1 * 1000);
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		getMessageObject().putResource(l.logging("The rendering has been finished"));
+
 	}
 
-	//TODO: ver si se usa en la renderizacion
+	// TODO: ver si se usa en la renderizacion
 	public static String substringBetween(String str, String open, String close) {
 		if (str == null || open == null || close == null) {
 			return null;
@@ -70,7 +77,7 @@ public class Renderer implements Runnable{
 		return null;
 	}
 
-	//TODO: ver si se usa en la renderizacion
+	// TODO: ver si se usa en la renderizacion
 	public static int giveMeSeconds(String line, String del1, String del2) {
 		String durVid = "";
 		String[] durVidPieces;
@@ -82,8 +89,6 @@ public class Renderer implements Runnable{
 				+ Integer.parseInt(durVidPieces[2].substring(0, 2));
 		return secs;
 	}
-
-
 
 	// private static void updateStatus(String percentage) {
 	// // Update Database Status
@@ -153,5 +158,5 @@ public class Renderer implements Runnable{
 	public void setInstanceManager(InstanceManager instanceManager) {
 		this.instanceManager = instanceManager;
 	}
-	
+
 }
