@@ -59,7 +59,7 @@ public class Renderer implements Runnable {
 								+ "sec and "));
 				i += 1;
 				//TODO:cambiar esto y ver como falla
-				Thread.sleep(1000);
+				Thread.sleep(3* 60 * 1000);
 			}
 		} catch (IOException | InterruptedException e1) {
 			// TODO Auto-generated catch block
