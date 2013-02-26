@@ -2,6 +2,11 @@
  * 
  */
 import java.io.IOException;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.Date;
 
 import com.amazonaws.services.s3.AmazonS3;
@@ -45,6 +50,36 @@ public class Renderer implements Runnable {
 		try { // TODO!!!
 			// rendering process
 			Process p = Runtime.getRuntime().exec("sleep 60");
+			
+			// DriverManager.registerDriver(new com.mysql.jdbc.Driver());
+			// TODO: CHANGE THINGS, DIRECCION, user, password.
+			String url = "jdbc:mysql://iitLuna.tk:3306/luna";
+			// String url = "jdbc:mysql://localhost:3306/mysql";
+			String username = "java";
+			String password = "edu";
+			Connection connection = null;
+			try {
+				System.out.println("Connecting database...");
+				connection = DriverManager.getConnection(url, username, password);
+				System.out.println("Database connected!");
+
+				Statement s = connection.createStatement();
+				ResultSet rs = s
+						.executeQuery("SELECT * FROM Credentials WHERE name = 'edu'");
+				while (rs.next()) {
+					l.logging(rs.getString(1));
+					l.logging(rs.getString(2));
+				}
+			} catch (SQLException e) {
+				throw new RuntimeException("Cannot connect the database!", e);
+			} finally {
+				System.out.println("Closing the connection.");
+				if (connection != null)
+					try {
+						connection.close();
+					} catch (SQLException ignore) {
+					}
+			}
 
 			// Sending the status every 30 minutes to keep alive the
 			// LunaCore Communication thread
