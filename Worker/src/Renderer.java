@@ -57,7 +57,7 @@ public class Renderer implements Runnable {
 						l.logging("Renderer is working, elapsed time: " + hours
 								+ "hours and " + min + "minutes"));
 				i += 1;
-				Thread.sleep(3* 60 * 1000);
+				Thread.sleep(60 * 1000);
 			}
 		} catch (IOException | InterruptedException e1) {
 			// TODO Auto-generated catch block
