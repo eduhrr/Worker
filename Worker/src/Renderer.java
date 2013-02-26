@@ -4,6 +4,8 @@
 import java.io.IOException;
 import java.util.Date;
 
+import com.amazonaws.services.s3.AmazonS3;
+
 /**
  * Responsible class for the rendering job
  * 
@@ -18,14 +20,16 @@ public class Renderer implements Runnable {
 	private String receiptHandle;
 	private Message MessageObject;
 	private InstanceManager instanceManager;
+	private static AmazonS3 s3;
 
 	public Renderer(int rowID2, String receiptHandle, Message msg,
-			InstanceManager instanceManager) {
+			InstanceManager instanceManager, AmazonS3 s3) {
 		super();
 		setReceiptHandle(receiptHandle);
 		setRowID(rowID);
 		setMessageObject(msg);
 		setInstanceManager(instanceManager);
+		setS3(s3);
 		new Thread(this, "Renderer").start();
 	}
 
@@ -43,22 +47,16 @@ public class Renderer implements Runnable {
 			Process p = Runtime.getRuntime().exec("sleep 60");
 
 			// Sending the status every 30 minutes to keep alive the
-			// Communication thread for the LunaCore
+			// LunaCore Communication thread
 			int i = 0;
 			int hours, min;
-			// TODO: CHange to 30 minutes
 			while (!processIsTerminated(p)) {
-//				hours = (i * 30) % 60;
-//				min = i * 30 - hours * 60;
-				hours = (i * 1000) % 1000;
-//				getMessageObject().putResource(
-//						l.logging("Renderer is working, elapsed time: " + hours
-//								+ "hours and " + min + "minutes"));
+				hours = (i * 30) % 60;
+				min = i * 30 - hours * 60;
 				getMessageObject().putResource(
 						l.logging("Renderer is working, elapsed time: " + hours
-								+ "sec and "));
+								+ "hours and " + min + "minutes"));
 				i += 1;
-				//TODO:cambiar esto y ver como falla
 				Thread.sleep(3* 60 * 1000);
 			}
 		} catch (IOException | InterruptedException e1) {
@@ -175,6 +173,14 @@ public class Renderer implements Runnable {
 
 	public void setInstanceManager(InstanceManager instanceManager) {
 		this.instanceManager = instanceManager;
+	}
+
+	public static AmazonS3 getS3() {
+		return s3;
+	}
+
+	public static void setS3(AmazonS3 s3) {
+		Renderer.s3 = s3;
 	}
 
 }

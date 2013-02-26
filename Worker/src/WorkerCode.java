@@ -10,6 +10,8 @@ import com.amazonaws.auth.PropertiesCredentials;
 import com.amazonaws.auth.AWSCredentials;
 import com.amazonaws.services.ec2.AmazonEC2;
 import com.amazonaws.services.ec2.AmazonEC2Client;
+import com.amazonaws.services.s3.AmazonS3;
+import com.amazonaws.services.s3.AmazonS3Client;
 
 /**
  * Main class of the java Worker code. It calls the rendering thread and the
@@ -22,6 +24,7 @@ import com.amazonaws.services.ec2.AmazonEC2Client;
 public class WorkerCode {
 
 	private static AmazonEC2 ec2;
+	private static AmazonS3 s3;
 	// ServerName of the LunaCore server, for the socket connection
 	private static final String serverName = "54.243.226.19";
 	// Port number for the socket connection
@@ -39,6 +42,7 @@ public class WorkerCode {
 					WorkerCode.class
 							.getResourceAsStream("AwsCredentials.properties"));
 			setEc2(new AmazonEC2Client(credentials));
+			setS3(new AmazonS3Client(credentials));
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -64,7 +68,7 @@ public class WorkerCode {
 		// Launching the threads
 		InstanceManager instanceManager = new InstanceManager(getEc2()); 
 		Message msg = new Message();
-		new Renderer(rowID, receiptHandle, msg, instanceManager);
+		new Renderer(rowID, receiptHandle, msg, instanceManager, getS3());
 		new ClientWorkerThread(rowID, receiptHandle, msg, getServerName(),
 				getPort(), instanceManager);
 		l.logging("Launched rendereing and communication threads ");
@@ -108,6 +112,14 @@ public class WorkerCode {
 
 	public static int getPort() {
 		return port;
+	}
+
+	public static AmazonS3 getS3() {
+		return s3;
+	}
+
+	public static void setS3(AmazonS3 s3) {
+		WorkerCode.s3 = s3;
 	}
 
 }
