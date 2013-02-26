@@ -121,6 +121,7 @@ public class Renderer implements Runnable {
 						url, username, password);
 				Statement s = connection.createStatement();
 				//"SELECT * FROM Credentials WHERE name = 'edu'"
+				
 				ResultSet rs = s.executeQuery("SELECT * FROM requests WHERE id = '"
 						+ getRowID() + "'");
 				//TODO: PARACE QUE NO COGE NADA DE LA BASE DE DATOS
