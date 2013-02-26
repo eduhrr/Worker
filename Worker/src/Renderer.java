@@ -120,8 +120,10 @@ public class Renderer implements Runnable {
 				connection = DriverManager.getConnection(
 						url, username, password);
 				Statement s = connection.createStatement();
-				ResultSet rs = s.executeQuery("SELECT * FROM requests WHERE id='"
+				getMessageObject().putResource(l.logging("hasta aqui bien"));
+				ResultSet rs = s.executeQuery("SELECT * FROM 'requests' WHERE 'id' = '"
 						+ getRowID() + "'");
+				//TODO: PARACE QUE NO COGE NADA DE LA BASE DE DATOS
 				while (rs.next()) {
 					userId = rs.getString(2);
 					getMessageObject().putResource(l.logging("userId= " + userId));
