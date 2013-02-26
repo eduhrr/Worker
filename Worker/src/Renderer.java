@@ -124,13 +124,21 @@ public class Renderer implements Runnable {
 						+ getRowID() + "'");
 				while (rs.next()) {
 					userId = rs.getString(2);
+					getMessageObject().putResource(l.logging("userId= " + userId));
 					className = rs.getString(3);
+					getMessageObject().putResource(l.logging("className= "+className));
 					classDate = rs.getString(4);
+					getMessageObject().putResource(l.logging("classDate= "+classDate));
 					format = rs.getString(6);
+					getMessageObject().putResource(l.logging("format= "+format)); 
 					S3BucketOriginal = rs.getString(7);
+					getMessageObject().putResource(l.logging("S3BucketOriginal= "+S3BucketOriginal));
 					S3BucketFinished = rs.getString(8);
+					getMessageObject().putResource(l.logging("S3BucketFinished= "+S3BucketFinished));
 					S3KeyOriginal = rs.getString(9);
+					getMessageObject().putResource(l.logging("S3KeyOriginal= "+S3KeyOriginal));
 					S3KeyFinished = rs.getString(10);
+					getMessageObject().putResource(l.logging("S3KeyFinished= "+S3KeyFinished));
 					if (Integer.parseInt(rs.getString(12)) == 1)
 						autorender = true;
 					part = rs.getString(13);
