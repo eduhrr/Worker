@@ -36,13 +36,13 @@ import com.amazonaws.services.s3.model.StorageClass;
  */
 public class Renderer implements Runnable {
 
-	private String rowID;
+	private int rowID;
 	private String receiptHandle;
 	private Message MessageObject;
 	private InstanceManager instanceManager;
 	private static AmazonS3 s3;
 
-	public Renderer(int rowID2, String receiptHandle, Message msg,
+	public Renderer(int rowID, String receiptHandle, Message msg,
 			InstanceManager instanceManager, AmazonS3 s3) {
 		super();
 		setReceiptHandle(receiptHandle);
@@ -120,8 +120,8 @@ public class Renderer implements Runnable {
 				connection = DriverManager.getConnection(
 						url, username, password);
 				Statement s = connection.createStatement();
-				getMessageObject().putResource(l.logging("hasta aqui bien"));
-				ResultSet rs = s.executeQuery("SELECT * FROM 'requests' WHERE 'id' = '"
+				//"SELECT * FROM Credentials WHERE name = 'edu'"
+				ResultSet rs = s.executeQuery("SELECT * FROM requests WHERE id = '"
 						+ getRowID() + "'");
 				//TODO: PARACE QUE NO COGE NADA DE LA BASE DE DATOS
 				while (rs.next()) {
@@ -590,12 +590,12 @@ public class Renderer implements Runnable {
 	 }
 	 }
 
-	public String getRowID() {
+	public int getRowID() {
 		return rowID;
 	}
 
-	public void setRowID(String rowID) {
-		this.rowID = rowID;
+	public void setRowID(int rowID2) {
+		this.rowID = rowID2;
 	}
 
 	public String getReceiptHandle() {
