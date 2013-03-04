@@ -213,7 +213,7 @@ public class Renderer implements Runnable {
 					&& line.contains("work result = 0"))
 				//TODO: se cierra el stream!!!, porque se destruye el origen
 				// se destruye instancia => no!!!!
-				p.destroy();
+				//p.destroy();
 
 			if (!vData.isTs() || (vData.getFormat().equals("mp3"))) {
 				// Percetage done (FFMPEG ONLY)
