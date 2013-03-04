@@ -25,10 +25,20 @@ public class WorkerCode {
 
 	private static AmazonEC2 ec2;
 	private static AmazonS3 s3;
-	// ServerName of the LunaCore server, for the socket connection
-	private static final String serverName = "54.243.226.19";
+
+	/* Socket communication Parameters */
+	// ServerName of the LunaCore server
+	private static final String socketServerName = "54.243.226.19";
 	// Port number for the socket connection
-	private static final int port = 6060;
+	private static final int socketPort = 6060;
+
+	/* DATA BASE Parameters */
+	private static final String serverNameDB = "iitLuna.tk";
+	// Default port
+	private static final int portDB = 3306;
+	private static final String nameDB = "luna";
+	private static final String userName = "java";
+	private static final String password = "edu";
 
 	/**
 	 * Static initializer block for setting up the AWS credentials which should
@@ -66,9 +76,11 @@ public class WorkerCode {
 		String receiptHandle = parts[1];
 
 		// Launching the threads
-		InstanceManager instanceManager = new InstanceManager(getEc2()); 
+		InstanceManager instanceManager = new InstanceManager(getEc2());
 		Message msg = new Message();
-		new Renderer(rowID, receiptHandle, msg, instanceManager, getS3());
+		DBManager db = new DBManager(getServerNameDB(), getPortDB(),
+				getNameDB(), getUserName(), getPassword());
+		new Renderer(rowID, receiptHandle, msg, instanceManager, getS3(), db);
 		new ClientWorkerThread(rowID, receiptHandle, msg, getServerName(),
 				getPort(), instanceManager);
 		l.logging("Launched rendereing and communication threads ");
@@ -84,7 +96,7 @@ public class WorkerCode {
 		 * be executed
 		 */
 		Thread.sleep(11 * 60 * 60 * 1000);
-		
+
 		// Killing the instance and sending error logs
 		msg.putResource(l.logging("An Error has been produced:"));
 		msg.putResource(l
@@ -107,11 +119,11 @@ public class WorkerCode {
 	}
 
 	public static String getServerName() {
-		return serverName;
+		return socketServerName;
 	}
 
 	public static int getPort() {
-		return port;
+		return socketPort;
 	}
 
 	public static AmazonS3 getS3() {
@@ -122,4 +134,31 @@ public class WorkerCode {
 		WorkerCode.s3 = s3;
 	}
 
+	public static String getSocketServerName() {
+		return socketServerName;
+	}
+
+	public static int getSocketport() {
+		return socketPort;
+	}
+
+	public static String getServerNameDB() {
+		return serverNameDB;
+	}
+
+	public static int getPortDB() {
+		return portDB;
+	}
+
+	public static String getNameDB() {
+		return nameDB;
+	}
+
+	public static String getUserName() {
+		return userName;
+	}
+
+	public static String getPassword() {
+		return password;
+	}
 }
