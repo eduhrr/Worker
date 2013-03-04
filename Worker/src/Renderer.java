@@ -186,6 +186,8 @@ public class Renderer implements Runnable {
 	 * @throws IOException
 	 * @throws InterruptedException
 	 */
+	
+	//TODO
 	private String runRenderingCommmand(String command, VideoData vData,
 			Message messageObject2, Logger l) throws IOException,
 			InterruptedException {
@@ -201,11 +203,16 @@ public class Renderer implements Runnable {
 		Process p = Runtime.getRuntime().exec(command);
 		BufferedReader bri = new BufferedReader(new InputStreamReader(
 				p.getErrorStream()));
+		//TODO
+		getMessageObject().putResource(l.logging("*********************LINEA 207**********************"));
 		while ((line = bri.readLine()) != null) {
 			outputProc.append(line + "\n");
 			getMessageObject().putResource(l.logging(line));
+			getMessageObject().putResource(l.logging("*********************LINEA 211**********************"));
 			if ((!vData.getFormat().equals("mp3"))
 					&& line.contains("work result = 0"))
+				//TODO: se cierra el stream!!!, porque se destruye el origen
+				// se destruye instancia => no!!!!
 				p.destroy();
 
 			if (!vData.isTs() || (vData.getFormat().equals("mp3"))) {
@@ -234,7 +241,10 @@ public class Renderer implements Runnable {
 			}
 			linesCount++;
 		}
-		bri.close();
+		getMessageObject().putResource(l.logging("*********************LINEA 242**********************"));
+		//bri.close();
+		getMessageObject().putResource(l.logging("*********************LINEA 244**********************"));
+
 		getMessageObject().putResource(
 				l.logging("Waiting for process to finish"));
 
@@ -330,6 +340,7 @@ public class Renderer implements Runnable {
 	 * @throws IOException
 	 * @throws InterruptedException
 	 */
+	//TODO
 	private void zipConversion(boolean isZip, VideoData vData, Logger l)
 			throws IOException, InterruptedException {
 		if (isZip) {
