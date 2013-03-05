@@ -124,53 +124,44 @@ public class Renderer implements Runnable {
 			 */
 
 			// Logs for debugging
-			getMessageObject().putResource(
-					l.logging("Information for debugging:"));
+			//getMessageObject().putResource(
+			//		l.logging("Information for debugging:"));
 			String instanceType = getInstanceManager().getInstanceType();
-			try {
-				String origType = nameExt[nameExt.length - 1];
-				getMessageObject().putResource(
-						l.logging("ORIGTYPE = " + origType));
-				getMessageObject().putResource(
-						l.logging("INSTANCETYPE = " + instanceType));
-				getMessageObject().putResource(
-						l.logging("OrigSize = " + origSize));
-				int finSize = (int) finishedFile.length();
-				getMessageObject().putResource(
-						l.logging("FinSize = " + finSize));
-				String output2 = output.replace("'", " ");
-				String output3 = output2.replace("\"", " ");
-				getMessageObject()
-						.putResource(l.logging("Output = " + output3));
+			String origType = nameExt[nameExt.length - 1];
+			//getMessageObject().putResource(l.logging("ORIGTYPE = " + origType));
+			//getMessageObject().putResource(
+			//		l.logging("INSTANCETYPE = " + instanceType));
+			//getMessageObject().putResource(l.logging("OrigSize = " + origSize));
+			int finSize = (int) finishedFile.length();
+			//getMessageObject().putResource(l.logging("FinSize = " + finSize));
+			String output2 = output.replace("'", " ");
+			String output3 = output2.replace("\"", " ");
+			//getMessageObject().putResource(l.logging("Output = " + output3));
 
-				// Insert logs into the DB
-				db.updateStatusDebuggingData(epoch1, epoch2, origType,
-						instanceType, origSize, finSize, output3, vData,
-						getMessageObject(), l);
+			// Insert logs into the DB
+			db.updateStatusDebuggingData(epoch1, epoch2, origType,
+					instanceType, origSize, finSize, output3, vData,
+					getMessageObject(), l);
 
-				// Updating parameters for statistics
-				if (vData.isAutorender()) {
-					db.updateParameter("autoConversions", 1, l);
-				} else {
-					db.updateParameter("onDemandConversions", 1, l);
-				}
-				if (instanceType.toLowerCase().contains("micro")) {
-					db.updateParameter("elapsedTimeMicro", elapsedTime, l);
-				} else {
-					db.updateParameter("elapsedTimeMedium", elapsedTime, l);
-				}
-
-				// Everything Done!!
-				// Insert in the share resource the key
-				// ("The rendering has been finished") to terminate the
-				// AWS Instance
-				getMessageObject().putResource(
-						l.logging("Everything done. Autokilling!"));
-				getMessageObject().putResource(
-						l.logging("The rendering has been finished"));
-			} catch (Exception e) {
-				e.printStackTrace();
+			// Updating parameters for statistics
+			if (vData.isAutorender()) {
+				db.updateParameter("autoConversions", 1, l);
+			} else {
+				db.updateParameter("onDemandConversions", 1, l);
 			}
+			if (instanceType.toLowerCase().contains("micro")) {
+				db.updateParameter("elapsedTimeMicro", elapsedTime, l);
+			} else {
+				db.updateParameter("elapsedTimeMedium", elapsedTime, l);
+			}
+
+			// Everything Done!!
+			// Insert in the share resource the key
+			// ("The rendering has been finished") to terminate the
+			// AWS Instance
+			getMessageObject().putResource(
+					l.logging("The rendering has been finished"));
+			getMessageObject().putResource(l.logging("Autokilling!"));
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -205,10 +196,10 @@ public class Renderer implements Runnable {
 
 		while ((line = bri.readLine()) != null) {
 			outputProc.append(line + "\n");
-			getMessageObject().putResource(l.logging(line));
-//			if ((!vData.getFormat().equals("mp3"))
-//					&& line.contains("work result = 0"))
-//				p.destroy();
+			//getMessageObject().putResource(l.logging(line));
+			// if ((!vData.getFormat().equals("mp3"))
+			// && line.contains("work result = 0"))
+			// p.destroy();
 
 			if (!vData.isTs() || (vData.getFormat().equals("mp3"))) {
 				// Percetage done (FFMPEG ONLY)
@@ -228,8 +219,8 @@ public class Renderer implements Runnable {
 					try {
 						int elapsedSecs = giveMeSeconds(line, "time=", " ");
 						double percentage = ((double) elapsedSecs / (double) totalSecs) * 100;
-						db.updateStatus(getRowID(), Double.toString(percentage).substring(
-								0, 5), l);
+						db.updateStatus(getRowID(), Double.toString(percentage)
+								.substring(0, 5), l);
 					} catch (Exception e) {
 					}
 				}
@@ -237,9 +228,6 @@ public class Renderer implements Runnable {
 			}
 			linesCount++;
 		}
-		getMessageObject()
-				.putResource(
-						l.logging("*********************LINEA 242**********************"));
 		bri.close();
 
 		getMessageObject().putResource(

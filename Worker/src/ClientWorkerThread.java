@@ -64,7 +64,7 @@ public class ClientWorkerThread implements Runnable {
 				msg = getMessageObject().getResource();
 				output.writeUTF(msg);
 				//l.logging("Sent message: " + msg);
-			} while (!msg.equals("The rendering has been finished")); 
+			} while (!msg.equals("Autokilling!")); 
 			/*
 			 * At this point the rendering job is done. It is needed now to
 			 * terminate the instance
