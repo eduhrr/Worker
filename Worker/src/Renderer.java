@@ -124,19 +124,22 @@ public class Renderer implements Runnable {
 			 */
 
 			// Logs for debugging
-			//getMessageObject().putResource(
-			//		l.logging("Information for debugging:"));
+			// getMessageObject().putResource(
+			// l.logging("Information for debugging:"));
 			String instanceType = getInstanceManager().getInstanceType();
 			String origType = nameExt[nameExt.length - 1];
-			//getMessageObject().putResource(l.logging("ORIGTYPE = " + origType));
-			//getMessageObject().putResource(
-			//		l.logging("INSTANCETYPE = " + instanceType));
-			//getMessageObject().putResource(l.logging("OrigSize = " + origSize));
+			// getMessageObject().putResource(l.logging("ORIGTYPE = " +
+			// origType));
+			// getMessageObject().putResource(
+			// l.logging("INSTANCETYPE = " + instanceType));
+			// getMessageObject().putResource(l.logging("OrigSize = " +
+			// origSize));
 			int finSize = (int) finishedFile.length();
-			//getMessageObject().putResource(l.logging("FinSize = " + finSize));
+			// getMessageObject().putResource(l.logging("FinSize = " +
+			// finSize));
 			String output2 = output.replace("'", " ");
 			String output3 = output2.replace("\"", " ");
-			//getMessageObject().putResource(l.logging("Output = " + output3));
+			// getMessageObject().putResource(l.logging("Output = " + output3));
 
 			// Insert logs into the DB
 			db.updateStatusDebuggingData(epoch1, epoch2, origType,
@@ -156,12 +159,13 @@ public class Renderer implements Runnable {
 			}
 
 			// Everything Done!!
-			// Insert in the share resource the key
-			// ("The rendering has been finished") to terminate the
-			// AWS Instance
+			// Insert in the share resource the key ="Autokilling!" to
+			// terminate the AWS Instance
 			getMessageObject().putResource(
 					l.logging("The rendering has been finished"));
-			getMessageObject().putResource(l.logging("Autokilling!"));
+			// Do not l.logging the Autokiling!, if time marke is put the
+			// instance will never terminate
+			getMessageObject().putResource("Autokilling!");
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -196,7 +200,7 @@ public class Renderer implements Runnable {
 
 		while ((line = bri.readLine()) != null) {
 			outputProc.append(line + "\n");
-			//getMessageObject().putResource(l.logging(line));
+			// getMessageObject().putResource(l.logging(line));
 			// if ((!vData.getFormat().equals("mp3"))
 			// && line.contains("work result = 0"))
 			// p.destroy();
