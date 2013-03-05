@@ -63,7 +63,7 @@ public class ClientWorkerThread implements Runnable {
 				// resource will be ready to consume
 				msg = getMessageObject().getResource();
 				output.writeUTF(msg);
-				l.logging("Sent message: " + msg);
+				//l.logging("Sent message: " + msg);
 			} while (!msg.equals("The rendering has been finished")); 
 			/*
 			 * At this point the rendering job is done. It is needed now to

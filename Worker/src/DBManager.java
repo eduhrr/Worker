@@ -83,13 +83,14 @@ public class DBManager {
 	}
 
 	/**
+	 * Update Database Status
 	 * 
 	 * @param rowID
 	 * @param percentage
 	 * @param l
 	 */
 	public void updateStatus(int rowID, String percentage, Logger l) {
-		// Update Database Status
+		
 		try {
 			startConnection();
 			Statement s = getConnection().createStatement();
@@ -110,6 +111,7 @@ public class DBManager {
 	}
 
 	/**
+	 * Update Database Status when rending is finished
 	 *  
 	 * @param rowID
 	 * @param vData
@@ -119,7 +121,6 @@ public class DBManager {
 	 */
 	public void UpdateStatusRenderingIsFinished(int rowID, VideoData vData,
 			Logger l, Message ms, AmazonS3 s3) {
-		// Update Database Status when rending is finished
 
 		try {
 			startConnection();
@@ -191,7 +192,21 @@ public class DBManager {
 		}
 	}
 
-	public void UpdateStatusDebuggigData(long epoch1, long epoch2,
+	/**
+	 * Update Debugging Data Status 
+	 * 
+	 * @param epoch1
+	 * @param epoch2
+	 * @param origType
+	 * @param instanceType
+	 * @param origSize
+	 * @param finSize
+	 * @param output3
+	 * @param vData
+	 * @param ms
+	 * @param l
+	 */
+	public void updateStatusDebuggingData(long epoch1, long epoch2,
 			String origType, String instanceType, int origSize, int finSize,
 			String output3, VideoData vData, Message ms, Logger l) {
 
@@ -227,10 +242,17 @@ public class DBManager {
 		}
 	}
 
+	/**
+	 * Update Database Parameter
+	 * 
+	 * @param parameter
+	 * @param quantity
+	 * @param l
+	 */
 	public void updateParameter(String parameter, long quantity, Logger l) {
 		
 		l.logging("Updating parameter '" + parameter + "' by " + quantity);
-		// Update Database Parameter
+		
 		try {
 			startConnection();
 			Statement s = getConnection().createStatement();
@@ -249,37 +271,6 @@ public class DBManager {
 				} catch (SQLException ignore) {
 				}
 		}
-	}
-
-	public static void main(String[] args) {
-		Logger l = new Logger();
-		DBManager db = new DBManager("iitLuna.tk", 3306, "luna", "java", "edu");
-		// DB test
-		// try {
-		// System.out.println("Connecting database...");
-		// db.startConnection();
-		// System.out.println("Database connected!");
-		//
-		// Statement s = db.getConnection().createStatement();
-		// ResultSet rs = s
-		// .executeQuery("SELECT * FROM Credentials WHERE name = 'edu'");
-		// while (rs.next()) {
-		// l.logging(rs.getString(1));
-		// l.logging(rs.getString(2));
-		// }
-		// } catch (SQLException e) {
-		// throw new RuntimeException("Cannot connect the database!", e);
-		// } finally {
-		// System.out.println("Closing the connection.");
-		// if (db.getConnection() != null)
-		// try {
-		// db.getConnection().close();
-		// } catch (SQLException ignore) {
-		// }
-		// }
-		VideoData vdata = db.getInfo(222, null, null, l);
-		vdata.print(null);
-
 	}
 
 	private void startConnection() throws SQLException {

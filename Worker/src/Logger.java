@@ -13,6 +13,14 @@ public class Logger {
 	public Logger() {
 	}
 
+	/**
+	 * Auxiliary Method
+	 * 
+	 * @param str
+	 * @param open
+	 * @param close
+	 * @return
+	 */
 	public String substringBetween(String str, String open, String close) {
 		if (str == null || open == null || close == null) {
 			return null;
@@ -27,6 +35,14 @@ public class Logger {
 		return null;
 	}
 
+	/**
+	 * Gets the time
+	 * 
+	 * @param line
+	 * @param del1
+	 * @param del2
+	 * @return
+	 */
 	public int giveMeSeconds(String line, String del1, String del2) {
 		String durVid = "";
 		String[] durVidPieces;
@@ -39,43 +55,12 @@ public class Logger {
 		return secs;
 	}
 
-	// private static void updateStatus(String percentage) {
-	// // Update Database Status
-	// try {
-	// Connection connec = DriverManager.getConnection(
-	// "jdbc:mysql://64.131.110.162/luna", "Europa", "a23d578");
-	// Statement s = connec.createStatement();
-	// String query1 = "UPDATE requests SET status='" + percentage
-	// + "' WHERE id='" + rowId + "'";
-	// s.executeUpdate(query1);
-	// s.close();
-	// connec.close();
-	// } catch (Exception e) {
-	// logging("Exception catch!!!! Something wrong updating status of a request");
-	// logging(e.toString());
-	// }
-	// }
-
-	// private static void updateParameter(String parameter, long quantity) {
-	// logging("Updating parameter '" + parameter + "' by " + quantity);
-	//
-	// // Update Database Parameter
-	// try {
-	// Connection connec = DriverManager.getConnection(
-	// "jdbc:mysql://64.131.110.162/luna", "Europa", "a23d578");
-	// Statement s = connec.createStatement();
-	// String query1 = "UPDATE parameters SET value=value+"
-	// + String.valueOf(quantity) + " WHERE parameter='"
-	// + parameter + "'";
-	// s.executeUpdate(query1);
-	// s.close();
-	// connec.close();
-	// } catch (Exception e) {
-	// logging("Exception catch!!!! Something wrong updating status of a request");
-	// logging(e.toString());
-	// }
-	// }
-
+	/**
+	 * Prints the logging line
+	 * 
+	 * @param lineToLog
+	 * @return
+	 */
 	public String logging(String lineToLog) {
 		Date time = new Date();
 		String line = "[" + time.toString() + "] " + lineToLog;

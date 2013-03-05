@@ -26,13 +26,20 @@ public class WorkerCode {
 	private static AmazonEC2 ec2;
 	private static AmazonS3 s3;
 
-	/* Socket communication Parameters */
+	// Socket communication Parameters
+	/**
+	 * TODO: Those parameters should be changed according to the new infrastructure
+	 */
 	// ServerName of the LunaCore server
 	private static final String socketServerName = "54.243.226.19";
 	// Port number for the socket connection
 	private static final int socketPort = 6060;
 
-	/* DATA BASE Parameters */
+	// DATA BASE Parameters
+	/*
+	 * TODO: Those parameters should be changed according to the new
+	 * infrastructure
+	 */
 	private static final String serverNameDB = "iitLuna.tk";
 	// Default port
 	private static final int portDB = 3306;
@@ -100,7 +107,7 @@ public class WorkerCode {
 		// Killing the instance and sending error logs
 		msg.putResource(l.logging("An Error has been produced:"));
 		msg.putResource(l
-				.logging("Something was wrong with the execution of the Renderer thread or/and Communication Thread"));
+				.logging("Something was wrong during the execution of the Renderer thread or/and Communication Thread"));
 		msg.putResource(l
 				.logging("The main thread had to terminate the worker instance with the rowID="
 						+ rowID));

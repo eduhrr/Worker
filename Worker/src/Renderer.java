@@ -60,6 +60,7 @@ public class Renderer implements Runnable {
 					getMessageObject(), l);
 
 			// Download Video from S3
+			vData.print(getMessageObject());
 			int origSize = vData.downloadVideo(getS3(), getMessageObject(), l);
 
 			// Checks if the video is zipped
@@ -99,8 +100,8 @@ public class Renderer implements Runnable {
 			long elapsedTime = epoch2 - epoch1;
 
 			StringBuilder sb = new StringBuilder();
-			sb.append("File is located in: https://"
-					+ vData.getS3BucketFinished() + ".s3.amazonaws.com/"
+			sb.append("File is located in: https://s3.amazonaws.com/"
+					+ vData.getS3BucketFinished() + "/"
 					+ vData.getS3KeyFinished() + " \n\n\n");
 			sb.append("Debug information:\n");
 			sb.append("Start time: " + time1 + "\n");
@@ -143,7 +144,7 @@ public class Renderer implements Runnable {
 						.putResource(l.logging("Output = " + output3));
 
 				// Insert logs into the DB
-				db.UpdateStatusDebuggigData(epoch1, epoch2, origType,
+				db.updateStatusDebuggingData(epoch1, epoch2, origType,
 						instanceType, origSize, finSize, output3, vData,
 						getMessageObject(), l);
 
@@ -166,7 +167,7 @@ public class Renderer implements Runnable {
 				getMessageObject().putResource(
 						l.logging("Everything done. Autokilling!"));
 				getMessageObject().putResource(
-						"The rendering has been finished");
+						l.logging("The rendering has been finished"));
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
@@ -186,8 +187,6 @@ public class Renderer implements Runnable {
 	 * @throws IOException
 	 * @throws InterruptedException
 	 */
-	
-	//TODO
 	private String runRenderingCommmand(String command, VideoData vData,
 			Message messageObject2, Logger l) throws IOException,
 			InterruptedException {
@@ -203,17 +202,13 @@ public class Renderer implements Runnable {
 		Process p = Runtime.getRuntime().exec(command);
 		BufferedReader bri = new BufferedReader(new InputStreamReader(
 				p.getErrorStream()));
-		//TODO
-		getMessageObject().putResource(l.logging("*********************LINEA 207**********************"));
+
 		while ((line = bri.readLine()) != null) {
 			outputProc.append(line + "\n");
 			getMessageObject().putResource(l.logging(line));
-			getMessageObject().putResource(l.logging("*********************LINEA 211**********************"));
-			if ((!vData.getFormat().equals("mp3"))
-					&& line.contains("work result = 0"))
-				//TODO: se cierra el stream!!!, porque se destruye el origen
-				// se destruye instancia => no!!!!
-				//p.destroy();
+//			if ((!vData.getFormat().equals("mp3"))
+//					&& line.contains("work result = 0"))
+//				p.destroy();
 
 			if (!vData.isTs() || (vData.getFormat().equals("mp3"))) {
 				// Percetage done (FFMPEG ONLY)
@@ -233,7 +228,8 @@ public class Renderer implements Runnable {
 					try {
 						int elapsedSecs = giveMeSeconds(line, "time=", " ");
 						double percentage = ((double) elapsedSecs / (double) totalSecs) * 100;
-						db.updateStatus(getRowID(), "converting", l);
+						db.updateStatus(getRowID(), Double.toString(percentage).substring(
+								0, 5), l);
 					} catch (Exception e) {
 					}
 				}
@@ -241,9 +237,10 @@ public class Renderer implements Runnable {
 			}
 			linesCount++;
 		}
-		getMessageObject().putResource(l.logging("*********************LINEA 242**********************"));
-		//bri.close();
-		getMessageObject().putResource(l.logging("*********************LINEA 244**********************"));
+		getMessageObject()
+				.putResource(
+						l.logging("*********************LINEA 242**********************"));
+		bri.close();
 
 		getMessageObject().putResource(
 				l.logging("Waiting for process to finish"));
@@ -340,7 +337,6 @@ public class Renderer implements Runnable {
 	 * @throws IOException
 	 * @throws InterruptedException
 	 */
-	//TODO
 	private void zipConversion(boolean isZip, VideoData vData, Logger l)
 			throws IOException, InterruptedException {
 		if (isZip) {

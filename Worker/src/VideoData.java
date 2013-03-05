@@ -40,107 +40,20 @@ public class VideoData {
 
 	public void print(Message ms) {
 		Logger l = new Logger();
-		// ms.putResource(l.logging("userId= " + getUserId()));
-		// ms.putResource(l.logging("className= " + getClassName()));
-		// ms.putResource(l.logging("classDate= " + getClassDate()));
-		// ms.putResource(l.logging("format= " + getFormat()));
-		// ms.putResource(l.logging("S3BucketOriginal= " +
-		// getS3BucketOriginal()));
-		// ms.putResource(l.logging("S3BucketFinished= " +
-		// getS3BucketFinished()));
-		// ms.putResource(l.logging("S3KeyOriginal= " + getS3KeyOriginal()));
-		// ms.putResource(l.logging("S3KeyFinished= " + getS3KeyFinished()));
-		// ms.putResource(l.logging("parts= " + getPart()));
-		// ms.putResource(l.logging("Autorender= " + isAutorender()));
-		l.logging("userId= " + getUserId());
-		l.logging("className= " + getClassName());
-		l.logging("classDate= " + getClassDate());
-		l.logging("format= " + getFormat());
-		l.logging("S3BucketOriginal= " + getS3BucketOriginal());
-		l.logging("S3BucketFinished= " + getS3BucketFinished());
-		l.logging("S3KeyOriginal= " + getS3KeyOriginal());
-		l.logging("S3KeyFinished= " + getS3KeyFinished());
-		l.logging("parts= " + getPart());
-		l.logging("Autorender= " + isAutorender());
+		ms.putResource(l.logging("userId= " + getUserId()));
+		ms.putResource(l.logging("className= " + getClassName()));
+		ms.putResource(l.logging("classDate= " + getClassDate()));
+		ms.putResource(l.logging("format= " + getFormat()));
+		ms.putResource(l.logging("S3BucketOriginal= " +
+		getS3BucketOriginal()));
+		ms.putResource(l.logging("S3BucketFinished= " +
+		getS3BucketFinished()));
+		ms.putResource(l.logging("S3KeyOriginal= " + getS3KeyOriginal()));
+		ms.putResource(l.logging("S3KeyFinished= " + getS3KeyFinished()));
+		ms.putResource(l.logging("parts= " + getPart()));
+		ms.putResource(l.logging("Autorender= " + isAutorender()));
 	}
-
-	public String getUserId() {
-		return userId;
-	}
-
-	public void setUserId(String userId) {
-		this.userId = userId;
-	}
-
-	public String getClassName() {
-		return className;
-	}
-
-	public void setClassName(String className) {
-		this.className = className;
-	}
-
-	public String getClassDate() {
-		return classDate;
-	}
-
-	public void setClassDate(String classDate) {
-		this.classDate = classDate;
-	}
-
-	public String getFormat() {
-		return format;
-	}
-
-	public void setFormat(String format) {
-		this.format = format;
-	}
-
-	public String getS3BucketOriginal() {
-		return S3BucketOriginal;
-	}
-
-	public void setS3BucketOriginal(String s3BucketOriginal) {
-		S3BucketOriginal = s3BucketOriginal.toLowerCase();
-		;
-	}
-
-	public String getS3BucketFinished() {
-		return S3BucketFinished;
-	}
-
-	public void setS3BucketFinished(String s3BucketFinished) {
-		S3BucketFinished = s3BucketFinished.toLowerCase();
-	}
-
-	public String getS3KeyOriginal() {
-		return S3KeyOriginal;
-	}
-
-	public void setS3KeyOriginal(String s3KeyOriginal) {
-		S3KeyOriginal = s3KeyOriginal;
-	}
-
-	public String getS3KeyFinished() {
-		return S3KeyFinished;
-	}
-
-	public void setS3KeyFinished(String s3KeyFinished) {
-		S3KeyFinished = s3KeyFinished;
-	}
-
-	public String getPart() {
-		return part;
-	}
-
-	public void setPart(String part) {
-		this.part = part;
-	}
-
-	public boolean isAutorender() {
-		return autorender;
-	}
-
+	
 	public void setAutorender(String autorender) {
 		if (Integer.parseInt(autorender) == 1) {
 			this.autorender = true;
@@ -283,6 +196,84 @@ public class VideoData {
 		s3.putObject(por);
 		ms.putResource(l.logging("File uploaded to S3 successfully"));
 		return finishedFile;
+	}
+
+
+	public String getUserId() {
+		return userId;
+	}
+
+	public void setUserId(String userId) {
+		this.userId = userId;
+	}
+
+	public String getClassName() {
+		return className;
+	}
+
+	public void setClassName(String className) {
+		this.className = className;
+	}
+
+	public String getClassDate() {
+		return classDate;
+	}
+
+	public void setClassDate(String classDate) {
+		this.classDate = classDate;
+	}
+
+	public String getFormat() {
+		return format;
+	}
+
+	public void setFormat(String format) {
+		this.format = format;
+	}
+
+	public String getS3BucketOriginal() {
+		return S3BucketOriginal;
+	}
+
+	public void setS3BucketOriginal(String s3BucketOriginal) {
+		S3BucketOriginal = s3BucketOriginal.toLowerCase();
+		;
+	}
+
+	public String getS3BucketFinished() {
+		return S3BucketFinished;
+	}
+
+	public void setS3BucketFinished(String s3BucketFinished) {
+		S3BucketFinished = s3BucketFinished.toLowerCase();
+	}
+
+	public String getS3KeyOriginal() {
+		return S3KeyOriginal;
+	}
+
+	public void setS3KeyOriginal(String s3KeyOriginal) {
+		S3KeyOriginal = s3KeyOriginal;
+	}
+
+	public String getS3KeyFinished() {
+		return S3KeyFinished;
+	}
+
+	public void setS3KeyFinished(String s3KeyFinished) {
+		S3KeyFinished = s3KeyFinished;
+	}
+
+	public String getPart() {
+		return part;
+	}
+
+	public void setPart(String part) {
+		this.part = part;
+	}
+
+	public boolean isAutorender() {
+		return autorender;
 	}
 
 }

@@ -6,7 +6,7 @@ import com.amazonaws.services.ec2.AmazonEC2;
 import com.amazonaws.services.ec2.model.TerminateInstancesRequest;
 
 /**
- * Responsible class for instance termination and getting the instance type
+ * Responsible class for instance methods
  * 
  * @author Eduardo Hernandez Marquina
  * @author Hector Veiga
@@ -20,7 +20,9 @@ public class InstanceManager {
 		setEc2(ec2);
 	}
 
-	// Kill myself
+	/**
+	 * Terminate the Instance
+	 */
 	public void killmePlease() {
 		// Kill myself
 		String instanceId = "";
@@ -44,6 +46,10 @@ public class InstanceManager {
 		getEc2().terminateInstances(terminateRequest);
 	}
 
+	/**
+	 * 
+	 * @return An String with the type of the instance
+	 */
 	public String getInstanceType() {
 		String instanceType = "";
 		try {
