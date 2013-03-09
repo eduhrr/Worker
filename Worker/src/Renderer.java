@@ -69,6 +69,9 @@ public class Renderer implements Runnable {
 			boolean isZip = vData.isVideoZipped(getMessageObject(), l, nameExt);
 			zipConversion(isZip, vData, l);
 
+			//Force a rendering error
+			//getMessageObject().putResource("ERROR");
+
 			// getting the Conversion script
 			String command = setRenderingScript(isZip, vData,
 					getMessageObject(), l);

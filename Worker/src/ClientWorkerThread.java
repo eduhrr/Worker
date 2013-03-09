@@ -64,7 +64,7 @@ public class ClientWorkerThread implements Runnable {
 				msg = getMessageObject().getResource();
 				output.writeUTF(msg);
 				//l.logging("Sent message: " + msg);
-			} while (!msg.equals("Autokilling!")); 
+			} while (!msg.equals("Autokilling!") && !msg.equals("ERROR")); 
 			/*
 			 * At this point the rendering job is done. It is needed now to
 			 * terminate the instance
@@ -76,6 +76,8 @@ public class ClientWorkerThread implements Runnable {
 			getInstanceManager().killmePlease(); 
 			
 		} catch (IOException e) {
+			System.out.println("Error conecting with the Data Base");
+			getInstanceManager().killmePlease(); 
 			e.printStackTrace();
 		}
 	}
